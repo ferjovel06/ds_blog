@@ -1,0 +1,95 @@
+{% load static %}
+{% load i18n %}
+{% load parler_tags %}
+<!-- Navbar -->
+<div class="fixed-top">
+    <nav class="py-1 navbar-top">
+        <div class="container d-flex flex-wrap">
+            <ul class="nav me-auto">
+                <li class="nav-item"><a class="nav-link link-light px-2">+ 505 7886
+                    3413</a>
+                </li>
+                <li class="nav-item"><a class="nav-link link-light px-2">|</a></li>
+                <li class="nav-item"><a href="mailto:fermajobe@gmail.com"
+                                        class="nav-link link-light px-2">fermajobe@gmail.com</a>
+                </li>
+            </ul>
+            <ul class="nav">
+                <li class="nav-item"><a
+                        href="https://www.facebook.com/people/Sitio-Ruinas-de-Leon-Viejo/61555666735511/?mibextid=2JQ9oc"
+                        class="nav-link link-light px-2" target="_blank"><i
+                        class="fa-brands fa-facebook"></i></a>
+                </li>
+                <li class="nav-item"><a href="https://wa.link/vqhj6r" class="nav-link link-light px-2"
+                                        target="_blank"><i
+                        class="fa-brands fa-whatsapp"></i></a>
+                </li>
+                <li class="nav-item"><a href="https://www.tiktok.com/@sitio.ruinas.de.l"
+                                        class="nav-link link-light px-2" target="_blank"><i
+                        class="fa-brands fa-tiktok"></i></a>
+                </li>
+
+                <li class="nav-item"><a href="https://m.me/61555666735511" target="_blank"
+                                        class="nav-link link-light px-2"><i
+                        class="fa-brands fa-facebook-messenger"></i></a>
+                </li>
+                <li class="nav-item"><a href="https://twitter.com/Srleonviejo" class="nav-link link-light px-2"
+                                        target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                </li>
+                <li class="nav-item"><a
+                        href="https://www.instagram.com/sitioruinasleonviejo.aml/?igsh=MWoxazFoeWdvdm5zbA%3D%3D"
+                        class="nav-link link-light px-2" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                </li>
+                <li class="nav-item"><a href="https://www.youtube.com/@sitioruinasdeleonviejo" target="_blank"
+                                        class="nav-link link-light px-2"><i
+                        class="fa-brands fa-youtube"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <header class="py-3 mb-4 navbar navbar-middle navbar-expand-md" aria-label="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}"
+               class="navbar-brand">
+                <img src="{% static 'images/logo.png' %}" alt="logo" width="112px" height="64px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 ms-auto">
+                    <div class="nav-link dropdown">
+                        <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white">
+                            {% for lang_code, title in LANGUAGES %}
+                                {% if lang_code == LANGUAGE_CODE %}
+                                    <i class="fa-solid fa-globe"></i>
+                                    {{ title }}
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <ul class="dropdown-menu languages" aria-labelledby="navbarDropdownMenuLink">
+                            {% for lang_code, title in LANGUAGES %}
+                                {% get_language_info for lang_code as lang %}
+                                {% get_translated_url lang_code as tr_url %}
+                                {% if tr_url %}
+                                    <li{% if lang_code == LANGUAGE_CODE %} class="is-selected"{% endif %}><a
+                                            href="{{ tr_url }}"
+                                            hreflang="{{ lang_code }}"
+                                            style="color: black;">{{ lang.name_local|capfirst }}</a>
+                                    </li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <li><a href="{% url 'home' %}"
+                           class="nav-link px-2 {% if current_page == 'home' %}active-link{% else %}link-light{% endif %}">{% trans 'Home' %}</a>
+                    </li>
+                    <li><a href="{% url 'blog:post_list' %}"
+                           class="nav-link px-2 {% if current_page == 'post_list' %}active-link{% else %}link-light{% endif %}">{% trans 'Blog' %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</div>

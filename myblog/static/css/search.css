@@ -1,0 +1,7 @@
+form.input-group {
+    justify-content: flex-end;
+}
+
+form.input-group p {
+    margin-bottom: 0;
+}

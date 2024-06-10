@@ -1,0 +1,28 @@
+{% load blog_tags %}
+{% load i18n %}
+{% if query %}
+    <section class="buscar-post">
+        <h1>{% trans 'Entries containing: ' %} "{{ query }}"</h1>
+        <h3>
+            {% with results.count as total_resultados %}
+                {{ total_resultados }} resultados encontrado{{ total_resultados|pluralize }}
+            {% endwith %}
+        </h3>
+        {% for post in results %}
+            <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+            {{ post.body|markdown|truncatewords_html:5 }}
+        {% empty %}
+            <p>No se han encontrado resultados.</p>
+        {% endfor %}
+        <p><a href="{% url "blog:buscar_post" %}">Realizar otra busqueda</a></p>
+        {% else %}
+        <div class="form-container mb-5">
+            <form method="get" class="input-group rounded">
+                {{ form.as_p }}
+                <button class="input-group-text border-0" id="search-addon" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+{% endif %}

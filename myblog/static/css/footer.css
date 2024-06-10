@@ -1,0 +1,13 @@
+.bg-footer {
+    background-color: var(--celeste-02);
+}
+
+.btn-footer {
+    background-color: var(--celeste-02);
+    color: #fff;
+}
+
+.btn-footer:hover {
+    background-color: var(--celeste-00);
+    color: #fff;
+}

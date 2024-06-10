@@ -1,0 +1,16 @@
+.navbar-top, .navbar-middle {
+    background-color: var(--celeste-02);
+}
+
+.navbar-toggler, .navbar-toggler-icon {
+    color: white;
+    border: none;
+}
+
+.navbar-toggler:hover, .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.active-link, .active-link:hover {
+    color: rgba(74, 208, 255, 1);
+}

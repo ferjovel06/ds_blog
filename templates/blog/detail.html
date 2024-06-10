@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load blog_tags %}
+{% load social_share %}
+{% load static %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block customCSS %}
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v18.0"
+            nonce="fjQ2fS3d"></script>
+    <main>
+        <div class="container post-list">
+            <div class="row post-list-container">
+                {% include 'blog/search.html' %}
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'home' %}" style="text-decoration: none">
+                                {% trans 'Home' %}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'blog:post_list' %}" style="text-decoration: none">
+                                {% trans 'Blog' %}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ post.title }}
+                        </li>
+                    </ol>
+                </nav>
+                <div class="post-detail col-lg-8 col-md-8 col-sm-12">
+                    <div class="card">
+
+                        <h1 class="post-title">{{ post.title }}</h1>
+                        <p class="date">
+                            {% blocktrans with post.author.first_name as first_name and post.author.last_name as last_name and post.publish as publish %}
+                                Published {{ publish }} by {{ first_name }} {{ last_name }}
+                            {% endblocktrans %}
+                        </p>
+                        <div class="post-body post-content">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}"
+                                     alt="{{ post.title }}"
+                                     class="post-img img-fluid">
+                            {% endif %}
+                            <div>
+                                <br>
+                            </div>
+                            {{ post.body|markdown }}
+                        </div>
+
+                        <div class="post-footer">
+                            <div class="post-labels">
+                        <span>
+                            Tags
+                        </span>
+                                <div class="label-head Label">
+                                    {% for tag in post.tags.all %}
+                                        <a href="{% url 'blog:post_list_by_tag' tag.slug %}" class="tags">
+                                            {{ tag.name }}
+                                        </a>
+                                        {% if not forloop.last %}
+                                            ,
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="social-sharing">
+                            <p class="fw-bold">{% trans 'Share on' %}</p>
+                            {% send_email object.title "Check out this post from Blog - Ruins of Leon Viejo: {{object.title}}!" object_or_url "Share by Email" %}
+                            {% post_to_facebook object_or_url "Share on Facebook" %}
+                            {% post_to_twitter "Check out this post from Blog - Ruins of Leon Viejo: {{object.title}}!" object_or_url "Share on Twitter" %}
+                        </div>
+                    </div>
+
+                    <h2>{% trans 'Related posts' %}</h2>
+                    {% for post in related_posts %}
+                        <div class="card col-lg-3 col-md-6 col-sm-12 col-12 my-4 p-3 blog-post post-related">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}"
+                                     alt="{{ post.title }}"
+                                     height="150px"
+                                     class="post-related-img mb-2">
+                            {% endif %}
+                            <h5>
+                                <a href="{{ post.get_absolute_url }}" class="post-detail-related">
+                                    {{ post.title }}
+                                </a>
+                            </h5>
+                            {{ post.body|truncatewords:30|linebreaks }}
+                            <p class="date">
+                                {% blocktrans with post.author.first_name as first_name and post.author.last_name as last_name and post.publish as publish %}
+                                    Published {{ publish }} by {{ first_name }} {{ last_name }}
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    {% empty %}
+                        <p>
+                            {% trans 'No similar posts yet.' %}
+                        </p>
+                    {% endfor %}
+
+                    {% if new_comment %}
+                        <h2>
+                            {% trans 'Your comment was added' %}
+                        </h2>
+                    {% else %}
+                        <section class="bg-light py-3 py-md-5">
+                            <div class="container">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                                        <h2 class="mb-4 display-5 text-center">
+                                            {% trans 'Leave us a comment' %}
+                                        </h2>
+                                        <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="row justify-content-lg-center">
+                                    <div class="col-12 col-lg-9">
+                                        <div class="bg-white border rounded shadow-sm overflow-hidden">
+
+                                            <form method="post">
+                                                {{ comment_form.as_p }}
+                                                {% csrf_token %}
+                                                <div class="col-12">
+                                                    <div class="d-grid">
+                                                        <button class="btn btn-read-more text-white mt-auto align-self-start fw-bold"
+                                                                type="submit">
+                                                            {% trans 'Post Comment' %}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                    <div class="my-4">
+                        {% if comments %}
+                            {% with comments.count as total_comments %}
+                                <h2>
+                                    {{ total_comments }} {% trans 'comment' %}{{ total_comments|pluralize }}
+                                </h2>
+                            {% endwith %}
+                        {% endif %}
+                        {% for comment in comments %}
+                            <div class="comment mb-3">
+                                <p class="info fw-bold">
+                                    {{ comment.name }} {% trans 'commented on' %} {{ comment.created }}
+                                </p>
+                                {{ comment.body|linebreaks }}
+                            </div>
+                        {% empty %}
+                            <p>
+                                {% trans 'No comments yet.' %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% include 'includes/blog_sidebar.html' %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

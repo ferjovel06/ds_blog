@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load location_tags %}
+{% block description %}
+    {% trans "Explore the history and ruins of León Viejo, one of the oldest Spanish colonial settlements in the Americas and a UNESCO World Heritage Site. Discover its significance, architecture, and location through a virtual tour and map." %}
+{% endblock %}
+{% block customCSS %}
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+            xmlns="http://www.w3.org/1999/html"/>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+{% endblock %}
+{% block scriptHead %}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+{% block content %}
+    <main>
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                {% for image in carousel %} <!-- Loop para las imágenes del carrusel -->
+                    <div class="swiper-slide">
+                        <img src="{{ image.image.url }}" alt="{{ image.title }}">
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <!-- History -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center my-5 separator-title">
+                        {% trans 'DISCOVER THE HISTORY' %}
+                    </h1>
+                    <p class="text-center separator-p">
+                        {% trans "The Historical Site" %}
+                        <a href="https://whc.unesco.org/en/list/613/" style="color: #1A1A1A; font-weight: bold"
+                           target="_blank">
+                            {% trans "'Ruinas de León Viejo'" %}
+                        </a>
+                        {% trans ", founded by the Spaniards in 1524 and declared a UNESCO World Heritage Site, is the first site in Nicaragua to hold this title." %}
+                    </p>
+                </div>
+            </div>
+            <div class="info my-3">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="https://whc.unesco.org/en/list/613/" style="color: #1A1A1A; font-weight: bold"
+                               target="_blank">
+                                {% trans "León Viejo" %}
+                            </a>
+                            {% trans "is one of the oldest Spanish colonial settlements in the Americas, and it is the original site where the city of León was founded in 1524. Located in the region of Puerto Momotombo, department of León, the ruins of this city, which never fully developed, provide an exceptional testimony to the economic and social structures of the Spanish empire in the 16th century." %}
+                            <br><br>
+                            {% trans "The city of" %}
+                            <a href="https://whc.unesco.org/en/list/613/" style="color: #1A1A1A; font-weight: bold"
+                               target="_blank">
+                                {% trans "León Viejo" %}
+                            </a>
+                            {% trans "was one of the earliest urban centers in the New World and is the only one in Latin America that preserves its original layout. Similarly, in terms of rank and hierarchy, it was the primary center in the entire territory, serving as the seat of the Provincial Colonial Government, custodian of the Royal Treasury, the Episcopal See of the Province, and the site of the Cathedral Church." %}
+                            <br><br>
+                            {% trans "This city is a living example of urban planning and architecture from the 16th century. The ruins and remnants were originally discovered in 1931 and rediscovered in 1967 by researchers from the National Autonomous University of Nicaragua (UNAN-León) with evident public interest. Excavations began the following year in search of historical artifacts." %}
+                            <br><br>
+                            {% trans "As a result of these excavations, it is known that the city had a layout similar to almost all cities in Hispanic America of that time, in a grid pattern, forming a perfect square with the plaza located at its center. Today, it is a place of historical interest where you can observe the ruins of the ancient city, statues of figures from the era, restorations of some buildings, the Momotombo volcano, and Lake Xolotlán. Visitors can also enjoy a guided tour that transports them to the past." %}
+                        </p>
+
+                        <img src="{% static 'images/catedral-leon-viejo.jpeg' %}" class="card-img-bottom"
+                             alt="Catedral Santa Maria de las Gracias">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Location -->
+        <hr>
+        <div class="container mt-0">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="text-center my-5 separator-title">
+                        {% trans 'EXPLORE THE RUINS' %}
+                    </h1>
+                    <p class="text-center separator-p">
+                        {% trans "Wander through the original city of León, one of the first Spanish colonial settlement in Nicaragua." %}
+                    </p>
+                </div>
+            </div>
+            <div id="map" style="height: 400px;"></div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block customJS %}
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 30,
+            effect: "fade",
+            centeredSlides: true,
+            loop: true,
+            autoHeight: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+    <script>
+        var map = L.map('map').setView([12.400148713849665, -86.61719140137552], 17);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = [
+            {% for location in locations %}
+
+                {
+                    lat: {{ location.latitude|replace_commas }},
+                    lng: {{ location.longitude|replace_commas }},
+                    image: '{{ location.image.url }}',
+                    description: '{{ location.name }}'
+
+                },
+            {% endfor %}
+        ];
+
+        locations.forEach(function (location) {
+            var marker = L.marker([location.lat, location.lng]).addTo(map);
+            marker.bindPopup('<img src="' + location.image + '" alt="Imagen" style="width: 150px;"><br>' + location.description);
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
+        });
+    </script>
+
+{% endblock %}

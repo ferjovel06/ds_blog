@@ -1,0 +1,133 @@
+{% load static %}
+{% load i18n %}
+{% load parler_tags %}
+<!-- Footer -->
+<div class="mt-5">
+    <footer class="text-white text-center text-lg-start bg-footer">
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!--Grid row-->
+            <div class="row mt-4">
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-4">
+                        {% trans 'About' %}
+                        <a href="https://whc.unesco.org/en/list/613/" target="_blank" style="color: #fff;">
+                            {% trans 'León Viejo' %}
+                        </a>
+                    </h5>
+
+                    <p>
+                        <a href="https://whc.unesco.org/en/list/613/" target="_blank" style="color: #fff;">
+                            {% trans 'León Viejo' %}
+                        </a>
+                        {% trans 'is one of the oldest Spanish colonial settlements in the Americas.' %}
+
+                    </p>
+
+                    <p>
+                        {% trans 'It did not develop and so its ruins are outstanding testimony to the social and economic structures of the Spanish Empire in the 16th century. Moreover, the site has immense archaeological potential.' %}
+                    </p>
+
+                    <div class="mt-4">
+                        <!-- Facebook -->
+                        <a type="button" class="btn btn-floating btn-footer btn-lg"
+                           href="https://www.facebook.com/people/Sitio-Ruinas-de-Leon-Viejo/61555666735511/?mibextid=2JQ9oc"
+                           target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <!-- Instagram -->
+                        <a type="button" class="btn btn-floating btn-footer btn-lg"
+                           href="https://www.instagram.com/sitioruinasleonviejo.aml/?igsh=MWoxazFoeWdvdm5zbA%3D%3D"
+                           target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <!-- Tik Tok -->
+                        <a type="button" class="btn btn-floating btn-footer btn-lg"
+                           href="https://www.tiktok.com/@sitio.ruinas.de.l" target="_blank">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-4">
+                        {% trans 'Visit Us' %}
+                    </h5>
+                    <ul class="fa-ul" style="margin-left: 1.65em;">
+                        <li class="mb-3">
+                            <span class="fa-li">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <a href="https://maps.app.goo.gl/vuSKVf6LUeMwnv1C6" target="_blank" style="color: #fff">
+                                <span class="ms-2">
+                                    {% trans 'León Viejo, from the court, 1 block to the south. 1 block to the east. Momotombo Port, La Paz Centro, Nicaragua.' %}
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <span class="fa-li">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <a href="mailto:sitioruinasleonviejo.aml@gmail.com" target="_blank" style="color: #fff">
+                                <span class="ms-2">sitioruinasleonviejo.aml@gmail.com</span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <span class="fa-li">
+                                <i class="fas fa-phone"></i>
+                            </span>
+                            <span class="ms-2">+505 7876 3413</span>
+                        </li>
+                    </ul>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-4">
+                        {% trans "Opening hours" %}
+                    </h5>
+
+                    <table class="table text-center text-white">
+                        <tbody class="font-weight-normal">
+                        <tr>
+                            <td>
+                                {% trans "Tuesday - Sunday" %}:
+                            </td>
+                            <td>8:00 am - 5:00 pm</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- language selector -->
+                    <h5 class="text-uppercase mb-4">{% trans 'Language' %}</h5>
+                    <ul class="fa-ul" style="margin: 0">
+                        {% for lang_code, title in LANGUAGES %}
+                            {% get_language_info for lang_code as lang %}
+                            {% get_translated_url lang_code as tr_url %}
+                            {% if tr_url %}
+                                <li{% if lang_code == LANGUAGE_CODE %} class="is-selected"{% endif %}><a
+                                        href="{{ tr_url }}"
+                                        hreflang="{{ lang_code }}"
+                                        style="color: #fff">{{ lang.name_local|capfirst }}</a></li>{% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            ©
+            {% trans "Ruins of León Viejo | Website Design & Management by Fernanda Jovel" %}
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+</div>
+<!-- Footer -->
